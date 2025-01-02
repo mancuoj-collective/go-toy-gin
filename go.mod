@@ -1,7 +1,7 @@
 module example
 
-go 1.22.0
+go 1.23.4
 
-require gin v0.0.0
+require gg v0.0.0
 
-replace gin => ./gin
+replace gg => ./gg

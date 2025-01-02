@@ -2,13 +2,14 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
-	"gin"
+	"gg"
 )
 
 func main() {
-	r := gin.New()
+	r := gg.New()
 
 	r.GET("/", func(w http.ResponseWriter, req *http.Request) {
 		fmt.Fprintf(w, "URL.Path = %q\n", req.URL.Path)
@@ -20,5 +21,6 @@ func main() {
 		}
 	})
 
+	log.Printf("Server is running on http://localhost:9999")
 	r.Run(":9999")
 }

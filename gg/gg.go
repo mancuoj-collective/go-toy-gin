@@ -1,34 +1,31 @@
-package gin
+package gg
 
 import (
 	"fmt"
 	"net/http"
 )
 
-type HandlerFunc func(http.ResponseWriter, *http.Request)
-
 type Engine struct {
-	router map[string]HandlerFunc
+	router map[string]http.HandlerFunc
 }
 
 func New() *Engine {
-	return &Engine{router: make(map[string]HandlerFunc)}
+	return &Engine{router: make(map[string]http.HandlerFunc)}
 }
 
-func (engine *Engine) addRoute(method, pattern string, handler HandlerFunc) {
+func (engine *Engine) addRoute(method string, pattern string, handler http.HandlerFunc) {
 	key := method + "-" + pattern
 	engine.router[key] = handler
 }
 
-func (engine *Engine) GET(pattern string, handler HandlerFunc) {
+func (engine *Engine) GET(pattern string, handler http.HandlerFunc) {
 	engine.addRoute("GET", pattern, handler)
 }
 
-func (engine *Engine) POST(pattern string, handler HandlerFunc) {
+func (engine *Engine) POST(pattern string, handler http.HandlerFunc) {
 	engine.addRoute("POST", pattern, handler)
 }
 
-// 实现了 ServerHTTP 接口的实例
 func (engine *Engine) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	key := req.Method + "-" + req.URL.Path
 	if handler, ok := engine.router[key]; ok {
@@ -38,7 +35,6 @@ func (engine *Engine) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	}
 }
 
-// 只要传入任何实现了 ServerHTTP 接口的实例，所有的HTTP请求，就都交给了该实例处理了
 func (engine *Engine) Run(addr string) (err error) {
 	return http.ListenAndServe(addr, engine)
 }
