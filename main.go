@@ -18,11 +18,12 @@ func main() {
 		c.String(http.StatusOK, "hello %s, you're at %s\n", c.Query("name"), c.Path)
 	})
 
-	r.POST("/login", func(c *gg.Context) {
-		c.JSON(http.StatusOK, gg.H{
-			"username": c.PostForm("username"),
-			"password": c.PostForm("password"),
-		})
+	r.GET("/hello/:name", func(c *gg.Context) {
+		c.String(http.StatusOK, "hello %s, you're at %s\n", c.Param("name"), c.Path)
+	})
+
+	r.GET("/assets/*filepath", func(c *gg.Context) {
+		c.JSON(http.StatusOK, gg.H{"filepath": c.Param("filepath")})
 	})
 
 	log.Printf("Server is running on http://localhost:9999")
